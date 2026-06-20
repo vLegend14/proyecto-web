@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Counter from '../components/Counter.tsx';
 ---
 
 <BaseLayout title="hola mundo">
-  <main class="min-h-screen flex items-center justify-center bg-neutral-900">
+  <main class="min-h-screen flex flex-col items-center justify-center gap-6 bg-neutral-900">
     <h1 class="text-4xl font-medium text-indigo-600">Hola mundo</h1>
+    <Counter client:load />
   </main>
 </BaseLayout>
