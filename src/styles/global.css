@@ -11,11 +11,24 @@
   --color-secondary-light: #60a5fa;
   --color-accent: #f59e0b;
   --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
   --color-border: #1e293b;
   --color-border-light: #334155;
   --color-text-muted: #94a3b8;
   --color-text-dim: #64748b;
+  --color-chart-1: #10b981;
+  --color-chart-2: #3b82f6;
+  --color-chart-3: #f59e0b;
   --font-family-sans: "Inter", sans-serif;
+
+  --text-caption: 11px;
+  --text-caption--line-height: 1.25;
+  --text-small: 13px;
+  --text-small--line-height: 1.4;
+  --text-body: 14px;
+  --text-body--line-height: 1.5;
 }
 
 @layer base {
@@ -99,6 +112,10 @@
 
   .glass-panel {
     @apply border border-slate-800/60 bg-slate-900/40 backdrop-blur-xl;
+  }
+
+  .btn-icon {
+    @apply flex items-center justify-center rounded-lg transition-colors active:scale-95 disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .text-gradient {

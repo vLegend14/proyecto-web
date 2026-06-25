@@ -1,6 +1,7 @@
 ---
 import Card from "./Card.astro";
 import Badge from "./Badge.astro";
+import Skeleton from "./Skeleton.astro";
 
 export interface Props {
   label: string;
@@ -11,36 +12,56 @@ export interface Props {
   icon: string;
   code: string;
   class?: string;
+  loading?: boolean;
 }
 
-const { label, value, time, trend, trendLabel, icon, code, class: className = "" } = Astro.props;
+const { label, value, time, trend, trendLabel, icon, code, class: className = "", loading = false } = Astro.props;
 ---
 
 <Card class={className}>
-  <div class="flex items-start justify-between">
-    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/8 ring-1 ring-emerald-500/10">
-      <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d={icon} />
-      </svg>
-    </div>
-    <Badge variant={trend}>
-      <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-        <path stroke-linecap="round" stroke-linejoin="round" d={trend === "up" ? "M5 10l7-7m0 0l7 7m-7-7v18" : "M19 14l-7 7m0 0l-7-7m7 7V3"} />
-      </svg>
-      {trendLabel}
-    </Badge>
-  </div>
-  <div class="mt-3">
-    <div class="flex items-center gap-1.5">
-      <p class="text-[11px] font-medium text-slate-500">{label}</p>
-      <span class="rounded bg-slate-800/50 px-1 py-0.5 text-[9px] font-mono font-medium text-slate-500">{code}</span>
-    </div>
-    <p class="mt-0.5 text-2xl font-bold tracking-tight text-white tabular-nums">{value}</p>
-  </div>
-  <div class="mt-2 flex items-center gap-1.5 text-[10px] text-slate-600">
-    <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-    {time}
-  </div>
+  {loading ? (
+    <>
+      <div class="flex items-start justify-between">
+        <Skeleton variant="rect" class="h-10 w-10" />
+        <Skeleton variant="rect" class="h-5 w-16 rounded-full" />
+      </div>
+      <div class="mt-3 space-y-2">
+        <div class="flex items-center gap-1.5">
+          <Skeleton variant="text" class="h-3 w-20" />
+          <Skeleton variant="text" class="h-3 w-8" />
+        </div>
+        <Skeleton variant="text" class="h-7 w-28" />
+        <Skeleton variant="text" class="h-2.5 w-16" />
+      </div>
+    </>
+  ) : (
+    <>
+      <div class="flex items-start justify-between">
+        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/8 ring-1 ring-emerald-500/10">
+          <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d={icon} />
+          </svg>
+        </div>
+        <Badge variant={trend}>
+          <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d={trend === "up" ? "M5 10l7-7m0 0l7 7m-7-7v18" : "M19 14l-7 7m0 0l-7-7m7 7V3"} />
+          </svg>
+          {trendLabel}
+        </Badge>
+      </div>
+      <div class="mt-3">
+        <div class="flex items-center gap-1.5">
+          <p class="text-[11px] font-medium text-slate-500">{label}</p>
+          <span class="rounded bg-slate-800/50 px-1 py-0.5 text-[9px] font-mono font-medium text-slate-500">{code}</span>
+        </div>
+        <p class="mt-0.5 text-2xl font-bold tracking-tight text-white tabular-nums">{value}</p>
+      </div>
+      <div class="mt-2 flex items-center gap-1.5 text-[10px] text-slate-600">
+        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {time}
+      </div>
+    </>
+  )}
 </Card>

@@ -2,14 +2,18 @@
 import '../styles/global.css';
 import Sidebar from '../components/navigation/Sidebar.astro';
 import MobileMenu from '../components/navigation/MobileMenu.tsx';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import Footer from '../components/Footer.astro';
 
 export interface Props {
   title?: string;
   currentPath?: string;
+  userName?: string;
+  userRole?: string;
+  lastSync?: string;
 }
 
-const { title = "Dashboard", currentPath = "/" } = Astro.props;
+const { title = "Dashboard", currentPath = "/", userName = "Usuario", userRole = "Administrador", lastSync = "hace 2 min" } = Astro.props;
 
 const pageTitles: Record<string, string> = {
   "/": "Dashboard",
@@ -19,6 +23,7 @@ const pageTitles: Record<string, string> = {
   "/dev-team/": "Dev Team",
 };
 const currentTitle = pageTitles[currentPath] || title;
+const initials = userName.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 ---
 
 <!doctype html>
@@ -33,28 +38,28 @@ const currentTitle = pageTitles[currentPath] || title;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <title>{currentTitle} — PYME Finance</title>
   </head>
-  <body class="min-h-screen bg-surface font-sans text-slate-100 antialiased">
+  <body data-page={currentPath} class="min-h-screen bg-surface font-sans text-slate-100 antialiased">
     <div class="flex min-h-screen">
       <Sidebar currentPath={currentPath} />
-      <div class="relative flex min-h-screen flex-1 flex-col lg:pl-64">
+      <div class="relative flex min-h-screen flex-1 flex-col lg:pl-60">
         <header class="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-800/50 bg-surface/80 px-4 backdrop-blur-xl lg:px-7">
           <MobileMenu currentPath={currentPath} client:load />
-          <div class="flex items-center gap-2.5">
-            <span class="hidden h-6 w-0.5 rounded-full bg-slate-700 lg:block" />
-            <div class="hidden items-center gap-2 lg:flex">
-              <span class="text-sm font-semibold tracking-tight text-slate-100">{currentTitle}</span>
-            </div>
-          </div>
-          <div class="lg:hidden">
+          <Breadcrumbs currentPath={currentPath} />
+          <div class="flex items-center gap-2.5 lg:hidden">
+            <span class="h-5 w-0.5 rounded-full bg-slate-700" />
             <span class="text-sm font-bold tracking-tight text-white">PYME Finance</span>
           </div>
           <div class="ml-auto flex items-center gap-1.5">
-            <button class="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-800/60 hover:text-slate-300">
+            <span class="hidden items-center gap-1.5 rounded-full bg-emerald-500/8 px-2.5 py-1 text-[11px] font-medium text-emerald-400 ring-1 ring-emerald-500/15 sm:inline-flex">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-500" style="animation: pulse-dot 2s infinite" />
+              {lastSync}
+            </span>
+            <button class="btn-icon relative h-8 w-8 text-slate-500 hover:bg-slate-800/60 hover:text-slate-300">
               <svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            <button class="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-800/60 hover:text-slate-300">
+            <button class="btn-icon relative h-8 w-8 text-slate-500 hover:bg-slate-800/60 hover:text-slate-300">
               <svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
@@ -63,11 +68,11 @@ const currentTitle = pageTitles[currentPath] || title;
             <span class="mx-1 h-5 w-px bg-slate-800" />
             <div class="flex items-center gap-2 pl-1">
               <div class="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-[11px] font-semibold text-white shadow-sm">
-                U
+                {initials}
               </div>
               <div class="hidden text-xs leading-tight sm:block">
-                <p class="font-medium text-slate-200">Usuario</p>
-                <p class="text-slate-500">Administrador</p>
+                <p class="font-medium text-slate-200">{userName}</p>
+                <p class="text-slate-500">{userRole}</p>
               </div>
             </div>
           </div>

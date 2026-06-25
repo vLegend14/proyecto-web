@@ -3,11 +3,15 @@ export interface Props {
   headers: string[];
   rows: string[][];
   class?: string;
+  loading?: boolean;
   empty?: boolean;
   error?: boolean;
+  sortable?: boolean;
+  sortKey?: number;
+  sortDir?: "asc" | "desc";
 }
 
-const { headers, rows, class: className = "", empty = false, error = false } = Astro.props;
+const { headers, rows, class: className = "", loading = false, empty = false, error = false, sortable = false, sortKey, sortDir } = Astro.props;
 ---
 
 <div class="overflow-hidden rounded-xl border border-slate-800/60 shadow-sm shadow-black/20 {className}">
@@ -16,14 +20,36 @@ const { headers, rows, class: className = "", empty = false, error = false } = A
       <thead>
         <tr class="border-b border-slate-800/60 bg-slate-900/60">
           {headers.map((header, i) => (
-            <th class="whitespace-nowrap px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-widest text-slate-500 {i === 0 ? 'pl-5' : ''}">
-              {header}
+            <th class="whitespace-nowrap px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-widest text-slate-500 {i === 0 ? 'pl-5' : ''} {sortable ? 'cursor-pointer select-none transition-colors hover:text-slate-400 active:scale-95' : ''}">
+              <span class="inline-flex items-center gap-1">
+                {header}
+                {sortable && (
+                  <span class="inline-flex flex-col leading-none">
+                    <svg class={`h-2 w-2 -mb-0.5 ${sortKey === i && sortDir === "asc" ? "text-emerald-400" : "text-slate-700"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                    </svg>
+                    <svg class={`h-2 w-2 ${sortKey === i && sortDir === "desc" ? "text-emerald-400" : "text-slate-700"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </span>
+                )}
+              </span>
             </th>
           ))}
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-800/30">
-        {empty &&
+        {loading &&
+          Array.from({ length: 5 }).map((_, ri) => (
+            <tr class={ri % 2 === 1 ? "bg-slate-800/10" : ""}>
+              {headers.map((_, i) => (
+                <td class="px-4 py-3 {i === 0 ? 'pl-5' : ''}">
+                  <div class={`h-3.5 rounded skeleton-shimmer ${i === 0 ? "w-32" : i === headers.length - 1 ? "w-20" : "w-24"}`} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        {empty && !loading &&
           (
             <tr>
               <td colspan={headers.length} class="px-4 py-16 text-center">
@@ -41,7 +67,7 @@ const { headers, rows, class: className = "", empty = false, error = false } = A
               </td>
             </tr>
           )}
-        {error &&
+        {error && !loading &&
           (
             <tr>
               <td colspan={headers.length} class="px-4 py-16 text-center">
@@ -59,7 +85,7 @@ const { headers, rows, class: className = "", empty = false, error = false } = A
               </td>
             </tr>
           )}
-        {!empty && !error && rows.map((row, ri) => (
+        {!loading && !empty && !error && rows.map((row, ri) => (
           <tr class="transition-colors hover:bg-slate-800/20 {ri % 2 === 1 ? 'bg-slate-800/10' : ''}">
             {row.map((cell, i) => (
               <td class="whitespace-nowrap px-4 py-2.5 text-slate-300 {i === 0 ? 'pl-5 font-medium text-slate-200' : ''}">
@@ -71,15 +97,15 @@ const { headers, rows, class: className = "", empty = false, error = false } = A
       </tbody>
     </table>
   </div>
-  {!empty && !error && rows.length > 0 && (
+  {!loading && !empty && !error && rows.length > 0 && (
     <div class="flex items-center justify-between border-t border-slate-800/30 bg-slate-900/30 px-4 py-2.5">
       <span class="text-[11px] text-slate-600">{rows.length} resultados</span>
       <div class="flex items-center gap-1">
-        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400" disabled>&lsaquo;</button>
-        <button class="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10 text-[11px] font-medium text-emerald-400">1</button>
-        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400">2</button>
-        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400">3</button>
-        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400">&rsaquo;</button>
+        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40" disabled>&lsaquo;</button>
+        <button class="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10 text-[11px] font-medium text-emerald-400 active:scale-95">1</button>
+        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400 active:scale-95">2</button>
+        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400 active:scale-95">3</button>
+        <button class="flex h-7 w-7 items-center justify-center rounded-md text-slate-600 transition-colors hover:bg-slate-800/40 hover:text-slate-400 active:scale-95">&rsaquo;</button>
       </div>
     </div>
   )}

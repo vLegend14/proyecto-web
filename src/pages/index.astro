@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Card from '../components/ui/Card.astro';
-import Skeleton from '../components/ui/Skeleton.astro';
 
 const hour = new Date().getHours();
 const greeting = hour < 12 ? "Buenos días" : hour < 18 ? "Buenas tardes" : "Buenas noches";
@@ -15,18 +14,17 @@ const dateStr = new Date().toLocaleDateString("es-CL", {
 const capitalizedDate = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
 ---
 
-<BaseLayout title="Dashboard" currentPath="/">
+<BaseLayout title="Dashboard" currentPath="/" userName="Cristopher Pérez" userRole="Analista Financiero">
   <div class="mx-auto max-w-6xl">
     <div class="mb-7 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h2 class="text-xl font-bold tracking-tight text-white sm:text-2xl">{greeting}👋</h2>
+        <h2 class="flex items-center gap-2.5 text-xl font-bold tracking-tight text-white sm:text-2xl">
+          <svg class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+          </svg>
+          {greeting}
+        </h2>
         <p class="mt-0.5 text-sm text-slate-500">{capitalizedDate}</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/8 px-2.5 py-1 text-[11px] font-medium text-emerald-400 ring-1 ring-emerald-500/15">
-          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500" style="animation: pulse-dot 2s infinite" />
-          Sincronizado hace 2 min
-        </span>
       </div>
     </div>
 
@@ -124,32 +122,6 @@ const capitalizedDate = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
           ))}
         </div>
       </Card>
-    </div>
-
-    <div style="animation: slideUp 0.4s ease-out 0.5s both">
-      <div class="mb-3 flex items-center gap-2">
-        <h3 class="text-xs font-semibold uppercase tracking-widest text-slate-600">Cargando indicadores</h3>
-        <div class="flex gap-1">
-          <span class="h-1 w-1 rounded-full bg-slate-600" style="animation: pulse-dot 1.5s infinite" />
-          <span class="h-1 w-1 rounded-full bg-slate-600" style="animation: pulse-dot 1.5s infinite 0.3s" />
-          <span class="h-1 w-1 rounded-full bg-slate-600" style="animation: pulse-dot 1.5s infinite 0.6s" />
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[1, 2, 3, 4].map((i) => (
-          <Card hover={false}>
-            <div class="flex items-start justify-between">
-              <Skeleton variant="rect" class="h-9 w-9" />
-              <Skeleton variant="rect" class="h-5 w-14 rounded-full" />
-            </div>
-            <div class="mt-3 space-y-2">
-              <Skeleton variant="text" class="h-3 w-20" />
-              <Skeleton variant="text" class="h-7 w-24" />
-              <Skeleton variant="text" class="h-2.5 w-16" />
-            </div>
-          </Card>
-        ))}
-      </div>
     </div>
   </div>
 </BaseLayout>

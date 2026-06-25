@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface DataPoint {
   date: string;
@@ -27,6 +27,7 @@ const mockData: DataPoint[] = [
 export default function AreaChart() {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; data: DataPoint } | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const w = 800;
   const h = 280;
@@ -42,10 +43,10 @@ export default function AreaChart() {
   const pts = mockData.map((d, i) => `${x(i)},${y(d.value)}`).join(" ");
   const area = `${pad.left},${h - pad.bottom} ${pts} ${x(mockData.length - 1)},${h - pad.bottom}`;
 
-  const fmt = (v: number) => `$${v.toLocaleString()}`;
+  const fmt = (v: number) => `$${v.toLocaleString("es-CL")}`;
 
   return (
-    <div class="relative w-full">
+    <div ref={containerRef} class="relative w-full">
       <svg viewBox={`0 0 ${w} ${h}`} class="w-full h-auto" preserveAspectRatio="xMidYMid meet"
         onMouseLeave={() => { setTooltip(null); setHovered(null); }}
       >
@@ -109,19 +110,27 @@ export default function AreaChart() {
         )}
       </svg>
 
-      {tooltip && (
-        <div class="pointer-events-none absolute z-10"
-          style={{ left: Math.min(tooltip.x + 12, 280), top: Math.max(tooltip.y - 50, 8) }}>
-          <div class="rounded-lg border border-slate-700/60 bg-slate-900/95 px-3 py-2 shadow-xl backdrop-blur-sm">
-            <div class="flex items-center gap-1.5">
-              <span class={`h-1.5 w-1.5 rounded-full ${tooltip.data.projected ? "bg-amber-400" : "bg-emerald-500"}`} />
-              <span class="text-xs text-slate-500">{tooltip.data.date}</span>
+      {tooltip && (() => {
+        const tipW = 140;
+        const container = containerRef.current;
+        const cw = container?.clientWidth ?? 800;
+        const ratio = cw / w;
+        const sx = tooltip.x;
+        const clampedX = sx < tipW * 0.4 ? tipW * 0.4 - sx : (sx > cw - tipW * 0.6 ? cw - tipW * 0.6 - sx : 0);
+        return (
+          <div class="pointer-events-none absolute z-10"
+            style={{ left: Math.max(4, Math.min(sx + 12 + clampedX, cw - tipW - 4)), top: Math.max(8, tooltip.y - 52) }}>
+            <div class="rounded-lg border border-slate-700/60 bg-slate-900/95 px-3 py-2 shadow-xl backdrop-blur-sm">
+              <div class="flex items-center gap-1.5">
+                <span class={`h-1.5 w-1.5 rounded-full ${tooltip.data.projected ? "bg-amber-400" : "bg-emerald-500"}`} />
+                <span class="text-xs text-slate-500">{tooltip.data.date}</span>
+              </div>
+              <p class="mt-0.5 text-sm font-bold text-white tabular-nums">{fmt(tooltip.data.value)}</p>
+              {tooltip.data.projected && <p class="text-[10px] text-amber-400/70">Proyectado</p>}
             </div>
-            <p class="mt-0.5 text-sm font-bold text-white tabular-nums">{fmt(tooltip.data.value)}</p>
-            {tooltip.data.projected && <p class="text-[10px] text-amber-400/70">Proyectado</p>}
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
