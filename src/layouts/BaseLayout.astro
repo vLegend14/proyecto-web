@@ -1,13 +1,15 @@
 ---
 import '../styles/global.css';
-import Header from '../components/Header.astro';
+import Sidebar from '../components/navigation/Sidebar.astro';
+import MobileMenu from '../components/navigation/MobileMenu.tsx';
 import Footer from '../components/Footer.astro';
 
 export interface Props {
   title?: string;
+  currentPath?: string;
 }
 
-const { title = "Titulo" } = Astro.props;
+const { title = "PYME Finance", currentPath = "/" } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,11 +19,39 @@ const { title = "Titulo" } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>{title} — PYME Finance</title>
   </head>
-  <body class="bg-neutral-900 text-blue">
-    <Header />
-    <slot />
-    <Footer />
+  <body class="min-h-screen bg-surface font-sans text-white antialiased">
+    <div class="flex min-h-screen">
+      <Sidebar currentPath={currentPath} />
+      <div class="flex flex-1 flex-col lg:pl-64">
+        <header class="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-neutral-800 bg-surface/80 px-4 backdrop-blur-md lg:px-8">
+          <MobileMenu currentPath={currentPath} client:load />
+          <div class="hidden lg:block">
+            <h1 class="text-base font-semibold text-white">{title}</h1>
+          </div>
+          <div class="lg:hidden">
+            <span class="text-base font-bold text-white">PYME Finance</span>
+          </div>
+          <div class="ml-auto flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-neutral-800 text-neutral-400">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </div>
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-sm font-medium text-primary">
+              U
+            </div>
+          </div>
+        </header>
+        <main class="flex-1 px-4 py-6 lg:px-8">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </div>
   </body>
 </html>
