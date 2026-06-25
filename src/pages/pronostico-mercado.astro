@@ -6,15 +6,18 @@ import StressScenarioCard from '../components/widgets/StressScenarioCard.astro';
 ---
 
 <BaseLayout title="Pronóstico de Mercado" currentPath="/pronostico-mercado/">
-  <div class="max-w-7xl">
+  <div class="max-w-7xl animate-fade-in">
     <div class="mb-8">
       <h2 class="text-2xl font-bold text-white">Pronóstico de Mercado</h2>
-      <p class="mt-1 text-sm text-neutral-400">Proyección de indicadores financieros basada en datos históricos</p>
+      <p class="mt-1 text-sm text-neutral-400">Proyección de indicadores financieros basada en datos históricos y análisis predictivo</p>
     </div>
 
     <Card class="mb-8">
-      <div class="mb-4 flex items-center justify-between">
-        <h3 class="text-base font-semibold text-white">Proyección UF — Próximos 12 meses</h3>
+      <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 class="text-base font-semibold text-white">Proyección UF — Próximos 12 meses</h3>
+          <p class="mt-0.5 text-xs text-neutral-500">Datos históricos + proyección estimada</p>
+        </div>
         <div class="flex items-center gap-4 text-xs text-neutral-500">
           <span class="flex items-center gap-1.5">
             <span class="h-2.5 w-2.5 rounded-full bg-emerald-500" />
@@ -27,44 +30,51 @@ import StressScenarioCard from '../components/widgets/StressScenarioCard.astro';
         </div>
       </div>
       <AreaChart client:load />
-      <div class="mt-4 grid grid-cols-2 gap-4 border-t border-neutral-800 pt-4 text-sm sm:grid-cols-4">
-        <div>
-          <p class="text-neutral-500">Mínimo proyectado</p>
-          <p class="font-semibold text-white">$51.000</p>
+      <div class="mt-5 grid grid-cols-2 gap-4 border-t border-neutral-800 pt-5 sm:grid-cols-4">
+        <div class="rounded-lg bg-neutral-800/30 p-3">
+          <p class="text-xs text-neutral-500">Mínimo proyectado</p>
+          <p class="mt-0.5 text-lg font-semibold text-white">$51.000</p>
         </div>
-        <div>
-          <p class="text-neutral-500">Máximo proyectado</p>
-          <p class="font-semibold text-white">$53.800</p>
+        <div class="rounded-lg bg-neutral-800/30 p-3">
+          <p class="text-xs text-neutral-500">Máximo proyectado</p>
+          <p class="mt-0.5 text-lg font-semibold text-white">$53.800</p>
         </div>
-        <div>
-          <p class="text-neutral-500">Variación esperada</p>
-          <p class="font-semibold text-emerald-400">+7,8%</p>
+        <div class="rounded-lg bg-neutral-800/30 p-3">
+          <p class="text-xs text-neutral-500">Variación esperada</p>
+          <p class="mt-0.5 text-lg font-semibold text-emerald-400">+7,8%</p>
         </div>
-        <div>
-          <p class="text-neutral-500">Confianza</p>
-          <p class="font-semibold text-amber-400">Media-Alta</p>
+        <div class="rounded-lg bg-neutral-800/30 p-3">
+          <p class="text-xs text-neutral-500">Confianza</p>
+          <p class="mt-0.5 text-lg font-semibold text-amber-400">Media-Alta</p>
         </div>
       </div>
     </Card>
 
     <div class="mb-6">
-      <h3 class="mb-2 text-lg font-semibold text-white">Simulador de Escenarios de Estrés Económico</h3>
-      <p class="mb-6 text-sm text-neutral-400">Evalúa el comportamiento de tus inversiones bajo diferentes condiciones de mercado.</p>
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-white">Simulador de Escenarios de Estrés Económico</h3>
+        <p class="mt-1 text-sm text-neutral-400">Evalúa el comportamiento de tus inversiones bajo diferentes condiciones de mercado.</p>
+      </div>
 
-      <Card class="mb-6">
-        <label for="amount" class="mb-1.5 block text-xs font-medium text-neutral-400">Monto en CLP</label>
-        <div class="flex gap-3">
-          <div class="relative flex-1">
-            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">$</span>
-            <input
-              type="text"
-              id="amount"
-              value="10.000.000"
-              readonly
-              class="w-full rounded-lg border border-neutral-700 bg-neutral-800 py-2.5 pl-7 pr-3 text-sm text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-            />
+      <Card class="mb-6" hover={false}>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div class="flex-1">
+            <label for="amount" class="mb-1.5 block text-xs font-medium text-neutral-400 uppercase tracking-wide">Monto en CLP</label>
+            <div class="relative">
+              <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">$</span>
+              <input
+                type="text"
+                id="amount"
+                value="10.000.000"
+                readonly
+                class="w-full rounded-lg border border-neutral-700 bg-neutral-800 py-2.5 pl-8 pr-3 text-sm font-medium text-white outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary tabular-nums"
+              />
+            </div>
           </div>
-          <button class="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark">
+          <button class="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-auto w-full">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+            </svg>
             Simular
           </button>
         </div>

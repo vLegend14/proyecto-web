@@ -2,9 +2,10 @@
 export interface Props {
   variant?: "up" | "down" | "neutral" | "primary" | "secondary" | "danger";
   class?: string;
+  pulse?: boolean;
 }
 
-const { variant = "neutral", class: className = "" } = Astro.props;
+const { variant = "neutral", class: className = "", pulse = false } = Astro.props;
 
 const variants = {
   up: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -16,6 +17,6 @@ const variants = {
 };
 ---
 
-<span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium {variants[variant]} {className}">
+<span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium {variants[variant]} {pulse ? 'animate-pulse' : ''} {className}">
   <slot />
 </span>

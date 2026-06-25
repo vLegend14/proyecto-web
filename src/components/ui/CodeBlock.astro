@@ -2,17 +2,27 @@
 export interface Props {
   code: string;
   class?: string;
+  filename?: string;
 }
 
-const { code, class: className = "" } = Astro.props;
+const { code, class: className = "", filename = "response.json" } = Astro.props;
 ---
 
-<div class="overflow-hidden rounded-xl border border-neutral-800 {className}">
-  <div class="flex items-center gap-1.5 border-b border-neutral-800 bg-neutral-900/80 px-4 py-2.5">
-    <span class="h-3 w-3 rounded-full bg-red-500/60" />
-    <span class="h-3 w-3 rounded-full bg-yellow-500/60" />
-    <span class="h-3 w-3 rounded-full bg-emerald-500/60" />
-    <span class="ml-2 text-xs text-neutral-500">response.json</span>
+<div class="overflow-hidden rounded-xl border border-neutral-800 shadow-lg shadow-black/20 {className}">
+  <div class="flex items-center justify-between border-b border-neutral-800 bg-neutral-900/90 px-4 py-2.5">
+    <div class="flex items-center gap-2">
+      <span class="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+      <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
+      <span class="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-neutral-500 font-mono">{filename}</span>
+      <span class="flex h-7 w-7 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300 transition-colors">
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      </span>
+    </div>
   </div>
-  <pre class="overflow-x-auto bg-neutral-950 p-4 text-sm leading-relaxed text-neutral-300"><code>{code}</code></pre>
+  <pre class="overflow-x-auto bg-neutral-950/80 p-4 text-sm leading-relaxed"><code class="text-neutral-300">{code}</code></pre>
 </div>

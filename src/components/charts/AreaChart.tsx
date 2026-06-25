@@ -26,10 +26,11 @@ const mockData: DataPoint[] = [
 
 export default function AreaChart() {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; data: DataPoint } | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const width = 800;
   const height = 320;
-  const padding = { top: 20, right: 20, bottom: 30, left: 50 };
+  const padding = { top: 20, right: 20, bottom: 30, left: 55 };
 
   const values = mockData.map((d) => d.value);
   const minVal = Math.min(...values) * 0.95;
@@ -43,28 +44,34 @@ export default function AreaChart() {
 
   const gradientId = "areaGradient";
 
+  const formatValue = (v: number) => `$${v.toLocaleString()}`;
+
   return (
     <div class="relative w-full">
       <svg
         viewBox={`0 0 ${width} ${height}`}
         class="w-full h-auto"
         preserveAspectRatio="xMidYMid meet"
-        onMouseLeave={() => setTooltip(null)}
+        onMouseLeave={() => {
+          setTooltip(null);
+          setHoveredIndex(null);
+        }}
       >
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgb(16, 185, 129)" stop-opacity="0.25" />
+            <stop offset="0%" stop-color="rgb(16, 185, 129)" stop-opacity="0.3" />
             <stop offset="100%" stop-color="rgb(16, 185, 129)" stop-opacity="0" />
           </linearGradient>
         </defs>
 
         {[0, 0.25, 0.5, 0.75, 1].map((pct) => {
           const y = yScale(minVal + (maxVal - minVal) * pct);
+          const val = Math.round(minVal + (maxVal - minVal) * pct);
           return (
             <g key={pct}>
               <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke="rgb(38, 38, 38)" stroke-width="1" />
-              <text x={padding.left - 8} y={y + 4} text-anchor="end" fill="rgb(115, 115, 115)" font-size="11">
-                ${Math.round(minVal + (maxVal - minVal) * pct).toLocaleString()}
+              <text x={padding.left - 10} y={y + 4} text-anchor="end" fill="rgb(115, 115, 115)" font-size="11">
+                {formatValue(val)}
               </text>
             </g>
           );
@@ -72,28 +79,36 @@ export default function AreaChart() {
 
         <polygon points={areaPoints} fill={`url(#${gradientId})`} />
 
-        <polyline points={points} fill="none" stroke="rgb(16, 185, 129)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <polyline points={points} fill="none" stroke="rgb(16, 185, 129)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 
-        {mockData.map((d, i) => (
-          <circle
-            key={i}
-            cx={xScale(i)}
-            cy={yScale(d.value)}
-            r={d.projected ? 3 : 4}
-            fill={d.projected ? "rgb(251, 191, 36)" : "rgb(16, 185, 129)"}
-            stroke="rgb(2, 6, 23)"
-            stroke-width="2"
-            class="cursor-pointer transition-opacity hover:opacity-80"
-            onMouseEnter={(e) => {
-              const rect = (e.target as SVGCircleElement).closest("svg")!.getBoundingClientRect();
-              setTooltip({
-                x: xScale(i) * (rect.width / width),
-                y: yScale(d.value) * (rect.height / height),
-                data: d,
-              });
-            }}
-          />
-        ))}
+        {mockData.map((d, i) => {
+          const isHovered = hoveredIndex === i;
+          const cx = xScale(i);
+          const cy = yScale(d.value);
+          return (
+            <g key={i}>
+              <circle
+                cx={cx}
+                cy={cy}
+                r={isHovered ? 8 : d.projected ? 3 : 4}
+                fill={d.projected ? "rgb(251, 191, 36)" : "rgb(16, 185, 129)"}
+                stroke={isHovered ? (d.projected ? "rgb(251, 191, 36)" : "rgb(16, 185, 129)") : "rgb(2, 6, 23)"}
+                stroke-width={isHovered ? 3 : 2}
+                class="cursor-pointer transition-all duration-200"
+                style={{ opacity: hoveredIndex !== null && !isHovered ? 0.3 : 1 }}
+                onMouseEnter={(e) => {
+                  setHoveredIndex(i);
+                  const rect = (e.target as SVGCircleElement).closest("svg")!.getBoundingClientRect();
+                  setTooltip({
+                    x: cx * (rect.width / width),
+                    y: cy * (rect.height / height),
+                    data: d,
+                  });
+                }}
+              />
+            </g>
+          );
+        })}
 
         {tooltip && (
           <line
@@ -103,7 +118,7 @@ export default function AreaChart() {
             y2={height - padding.bottom}
             stroke="rgb(115, 115, 115)"
             stroke-width="1"
-            stroke-dasharray="4"
+            stroke-dasharray="4 4"
           />
         )}
 
@@ -142,12 +157,17 @@ export default function AreaChart() {
 
       {tooltip && (
         <div
-          class="pointer-events-none absolute z-10 rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 shadow-xl"
-          style={{ left: tooltip.x + 12, top: tooltip.y - 40 }}
+          class="pointer-events-none absolute z-10 animate-fade-in"
+          style={{ left: Math.min(tooltip.x + 12, 300), top: Math.max(tooltip.y - 55, 10) }}
         >
-          <p class="text-xs text-neutral-400">{tooltip.data.date}</p>
-          <p class="text-sm font-semibold text-white">${tooltip.data.value.toLocaleString()}</p>
-          {tooltip.data.projected && <p class="text-[10px] text-amber-400">Proyectado</p>}
+          <div class="rounded-lg border border-neutral-700 bg-neutral-900/95 px-3 py-2.5 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center gap-2">
+              <span class={`h-2 w-2 rounded-full ${tooltip.data.projected ? "bg-amber-400" : "bg-emerald-500"}`} />
+              <span class="text-xs text-neutral-400">{tooltip.data.date}</span>
+            </div>
+            <p class="mt-1 text-sm font-bold text-white tabular-nums">{formatValue(tooltip.data.value)}</p>
+            {tooltip.data.projected && <p class="mt-0.5 text-[10px] font-medium text-amber-400/80">Proyectado</p>}
+          </div>
         </div>
       )}
     </div>

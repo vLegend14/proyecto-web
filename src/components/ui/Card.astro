@@ -2,11 +2,12 @@
 export interface Props {
   class?: string;
   padding?: boolean;
+  hover?: boolean;
 }
 
-const { class: className = "", padding = true } = Astro.props;
+const { class: className = "", padding = true, hover = true } = Astro.props;
 ---
 
-<div class="rounded-xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm shadow-lg shadow-black/20 {padding ? 'p-5' : ''} {className}">
+<div class="rounded-xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm shadow-lg shadow-black/20 {hover ? 'card-hover' : ''} {padding ? 'p-5' : ''} {className}">
   <slot />
 </div>
