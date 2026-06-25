@@ -6,74 +6,65 @@ import StressScenarioCard from '../components/widgets/StressScenarioCard.astro';
 ---
 
 <BaseLayout title="Pronóstico de Mercado" currentPath="/pronostico-mercado/">
-  <div class="max-w-7xl animate-fade-in">
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-white">Pronóstico de Mercado</h2>
-      <p class="mt-1 text-sm text-neutral-400">Proyección de indicadores financieros basada en datos históricos y análisis predictivo</p>
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-7">
+      <h2 class="text-xl font-bold tracking-tight text-white sm:text-2xl">Pronóstico de Mercado</h2>
+      <p class="mt-0.5 text-sm text-slate-500">Proyección de indicadores basada en datos históricos y análisis predictivo</p>
     </div>
 
-    <Card class="mb-8">
+    <Card class="mb-7">
       <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 class="text-base font-semibold text-white">Proyección UF — Próximos 12 meses</h3>
-          <p class="mt-0.5 text-xs text-neutral-500">Datos históricos + proyección estimada</p>
+          <h3 class="text-sm font-semibold text-slate-200">Proyección UF — Próximos 12 meses</h3>
+          <p class="mt-0.5 text-xs text-slate-500">Datos históricos + proyección estimada</p>
         </div>
-        <div class="flex items-center gap-4 text-xs text-neutral-500">
-          <span class="flex items-center gap-1.5">
-            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+        <div class="flex items-center gap-3">
+          <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <span class="h-2 w-2 rounded-full bg-emerald-500" />
             Histórico
           </span>
-          <span class="flex items-center gap-1.5">
-            <span class="h-2.5 w-2.5 rounded-full bg-amber-400" />
+          <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <span class="h-2 w-2 rounded-full bg-amber-400" />
             Proyectado
           </span>
         </div>
       </div>
       <AreaChart client:load />
-      <div class="mt-5 grid grid-cols-2 gap-4 border-t border-neutral-800 pt-5 sm:grid-cols-4">
-        <div class="rounded-lg bg-neutral-800/30 p-3">
-          <p class="text-xs text-neutral-500">Mínimo proyectado</p>
-          <p class="mt-0.5 text-lg font-semibold text-white">$51.000</p>
-        </div>
-        <div class="rounded-lg bg-neutral-800/30 p-3">
-          <p class="text-xs text-neutral-500">Máximo proyectado</p>
-          <p class="mt-0.5 text-lg font-semibold text-white">$53.800</p>
-        </div>
-        <div class="rounded-lg bg-neutral-800/30 p-3">
-          <p class="text-xs text-neutral-500">Variación esperada</p>
-          <p class="mt-0.5 text-lg font-semibold text-emerald-400">+7,8%</p>
-        </div>
-        <div class="rounded-lg bg-neutral-800/30 p-3">
-          <p class="text-xs text-neutral-500">Confianza</p>
-          <p class="mt-0.5 text-lg font-semibold text-amber-400">Media-Alta</p>
-        </div>
+      <div class="mt-5 grid grid-cols-2 gap-3 border-t border-slate-800/60 pt-5 sm:grid-cols-4">
+        {[
+          { label: "Mínimo proyectado", value: "$51.000", color: "text-slate-200" },
+          { label: "Máximo proyectado", value: "$53.800", color: "text-slate-200" },
+          { label: "Variación esperada", value: "+7,8%", color: "text-emerald-400" },
+          { label: "Confianza", value: "Media-Alta", color: "text-amber-400" },
+        ].map((m) => (
+          <div class="rounded-lg bg-slate-800/20 p-3">
+            <p class="text-[10px] font-medium uppercase tracking-wider text-slate-600">{m.label}</p>
+            <p class="mt-0.5 text-base font-semibold {m.color}">{m.value}</p>
+          </div>
+        ))}
       </div>
     </Card>
 
     <div class="mb-6">
       <div class="mb-6">
-        <h3 class="text-lg font-semibold text-white">Simulador de Escenarios de Estrés Económico</h3>
-        <p class="mt-1 text-sm text-neutral-400">Evalúa el comportamiento de tus inversiones bajo diferentes condiciones de mercado.</p>
+        <h3 class="text-base font-semibold text-slate-200">Simulador de Escenarios de Estrés</h3>
+        <p class="mt-0.5 text-sm text-slate-500">Evalúa el comportamiento de tus inversiones bajo diferentes condiciones de mercado.</p>
       </div>
 
       <Card class="mb-6" hover={false}>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div class="flex-1">
-            <label for="amount" class="mb-1.5 block text-xs font-medium text-neutral-400 uppercase tracking-wide">Monto en CLP</label>
+            <label for="amount" class="mb-1.5 block text-[10px] font-semibold uppercase tracking-widest text-slate-500">Monto en CLP</label>
             <div class="relative">
-              <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500">$</span>
-              <input
-                type="text"
-                id="amount"
-                value="10.000.000"
-                readonly
-                class="w-full rounded-lg border border-neutral-700 bg-neutral-800 py-2.5 pl-8 pr-3 text-sm font-medium text-white outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary tabular-nums"
+              <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500">$</span>
+              <input type="text" id="amount" value="10.000.000" readonly
+                class="w-full rounded-lg border border-slate-700/60 bg-slate-800/50 py-2.5 pl-7 pr-3 text-sm font-medium text-slate-200 outline-none transition-colors focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 tabular-nums"
               />
             </div>
           </div>
-          <button class="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/50 sm:w-auto w-full">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+          <button class="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-emerald-500 sm:w-auto w-full">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
             </svg>
             Simular
           </button>
@@ -82,24 +73,18 @@ import StressScenarioCard from '../components/widgets/StressScenarioCard.astro';
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StressScenarioCard
-          title="Valor Proyectado"
-          value="$10.850.000"
-          change="+8,5% en 12 meses"
-          description="Crecimiento sostenido con inflación controlada y estabilidad cambiaria. Escenario base con recuperación económica gradual."
+          title="Valor Proyectado" value="$10.850.000" change="+8,5% en 12 meses"
+          description="Crecimiento sostenido con inflación controlada y estabilidad cambiaria. Escenario base con recuperación gradual."
           variant="optimistic"
         />
         <StressScenarioCard
-          title="Valor Proyectado"
-          value="$10.450.000"
-          change="+4,5% en 12 meses"
-          description="Mercado con volatilidad moderada. Crecimiento estable pero por debajo del promedio histórico reciente."
+          title="Valor Proyectado" value="$10.450.000" change="+4,5% en 12 meses"
+          description="Mercado con volatilidad moderada. Crecimiento estable por debajo del promedio histórico."
           variant="conservative"
         />
         <StressScenarioCard
-          title="Valor Proyectado"
-          value="$9.200.000"
-          change="-8,0% en 12 meses"
-          description="Escenario de contracción económica con alta inflación y depreciación cambiaria significativa."
+          title="Valor Proyectado" value="$9.200.000" change="-8,0% en 12 meses"
+          description="Contracción económica con alta inflación y depreciación cambiaria significativa."
           variant="risk"
         />
       </div>

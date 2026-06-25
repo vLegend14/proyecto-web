@@ -5,10 +5,7 @@ export interface Props {
 }
 
 const { class: className = "", variant = "rect" } = Astro.props;
-
-const shape = variant === "circle" ? "rounded-full" : variant === "text" ? "rounded" : "rounded-lg";
+const shape = variant === "circle" ? "rounded-full" : variant === "text" ? "rounded-md" : "rounded-lg";
 ---
 
-<div class="skeleton-shimmer {shape} {className}">
-  <slot />
-</div>
+<div class="skeleton-shimmer {shape} {className}" />

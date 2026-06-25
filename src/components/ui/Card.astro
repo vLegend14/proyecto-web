@@ -8,6 +8,6 @@ export interface Props {
 const { class: className = "", padding = true, hover = true } = Astro.props;
 ---
 
-<div class="rounded-xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm shadow-lg shadow-black/20 {hover ? 'card-hover' : ''} {padding ? 'p-5' : ''} {className}">
+<div class="rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-xl shadow-sm shadow-black/20 {hover ? 'card-hover' : ''} {padding ? 'p-4 sm:p-5' : ''} {className}">
   <slot />
 </div>
