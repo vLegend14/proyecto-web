@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TeamCard from '../components/ui/TeamCard.astro';
+
+// ─── equipo ficticio del proyecto
+const teamMembers = [
+  { name: "Cristobal Rodriguez", role: "Gestor de Proyecto", description: "Planificación de sprints, gestión de requerimientos y comunicación con stakeholders académicos.", initials: "CR" },
+  { name: "Jose Figueroa", role: "Backend Developer", description: "Integración con APIs externas, lógica de negocio y gestión de datos. Responsable de endpoints y seguridad.", initials: "JF" },
+  { name: "Eliott Ponce", role: "Líder Técnico", description: "Arquitectura de sistema, revisión de código y coordinación técnica. Responsable de decisiones de infraestructura y despliegue.", initials: "EP" },
+  { name: "Cristopher Perez", role: "Diseñador UI/UX", description: "Diseño de interfaces y prototipado en Figma. Define el sistema de diseño y componentes visuales.", initials: "CP" },
+  { name: "Brandon Araneda", role: "Frontend Developer", description: "Implementación de componentes React, gestión de estado y optimización de rendimiento", initials: "BA" },
+];
+---
+
+<BaseLayout title="Dev Team" currentPath="/dev-team/">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-7">
+      <h2 class="text-xl font-bold tracking-tight text-white sm:text-2xl">Equipo</h2>
+      <p class="mt-0.5 text-sm text-slate-500">Conoce al equipo detrás de PYME Finance</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      {teamMembers.map((member, memberIndex) => (
+        <div style={`animation: slideUp 0.4s ease-out ${memberIndex * 0.08}s both`}>
+          <TeamCard
+            name={member.name}
+            role={member.role}
+            description={member.description}
+            avatarInitials={member.initials}
+          />
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-10 text-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-slate-800/20 px-3.5 py-1.5">
+        <span class="flex h-2 w-2 rounded-full bg-emerald-500" />
+        <span class="text-[11px] text-slate-500">5 miembros activos</span>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

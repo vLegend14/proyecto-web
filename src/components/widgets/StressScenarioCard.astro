@@ -1,0 +1,61 @@
+---
+export interface Props {
+  title: string;
+  value: string;
+  change: string;
+  description: string;
+  variant: "optimistic" | "conservative" | "risk";
+  class?: string;
+}
+
+const { title, value, change, description, variant, class: className = "" } = Astro.props;
+
+// ─── tailwind no puede generar clases con interpolacion dinamica en runtime ──────
+// ── deben usarse objetos completos para que el compilador las detecte
+const variantConfig = {
+  optimistic: {
+    badge:  "Optimista",
+    icon:   "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6",
+    accent: "text-emerald-400",
+    border: "border-emerald-500/15",
+    label:  "bg-emerald-500/8 text-emerald-400",
+    iconBg: "bg-emerald-500/8",
+  },
+  conservative: {
+    badge:  "Conservador",
+    icon:   "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+    accent: "text-blue-400",
+    border: "border-blue-500/15",
+    label:  "bg-blue-500/8 text-blue-400",
+    iconBg: "bg-blue-500/8",
+  },
+  risk: {
+    badge:  "Riesgo",
+    icon:   "M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z",
+    accent: "text-red-400",
+    border: "border-red-500/15",
+    label:  "bg-red-500/8 text-red-400",
+    iconBg: "bg-red-500/8",
+  },
+} as const;
+
+const selectedVariant = variantConfig[variant];
+---
+
+<div class={`rounded-xl border ${selectedVariant.border} bg-slate-900/40 p-7 backdrop-blur-xl transition-all duration-300 hover:shadow-lg hover:shadow-black/30 ${className}`}>
+  <div class="flex items-start justify-between">
+    <span class={`inline-flex items-center gap-1 rounded-full ${selectedVariant.label} px-2 py-0.5 text-[11px] font-medium`}>
+      {selectedVariant.badge}
+    </span>
+    <div class={`flex h-7 w-7 items-center justify-center rounded-md ${selectedVariant.iconBg}`}>
+      <svg class={`h-4 w-4 ${selectedVariant.accent}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d={selectedVariant.icon} />
+      </svg>
+    </div>
+  </div>
+  <p class="mt-4 text-xs text-slate-500">{title}</p>
+  <p class="mt-0.5 text-2xl font-bold tracking-tight text-white tabular-nums">{value}</p>
+  <p class={`mt-0.5 text-sm font-medium ${selectedVariant.accent}`}>{change}</p>
+  <div class="mt-4 mb-3 h-px bg-gradient-to-r from-slate-800 to-transparent" />
+  <p class="text-xs leading-relaxed text-slate-600">{description}</p>
+</div>

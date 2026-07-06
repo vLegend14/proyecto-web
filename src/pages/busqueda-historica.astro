@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HistoricalSearch from '../components/widgets/HistoricalSearch.tsx';
+import CurrentValues from '../components/widgets/CurrentValues.tsx';
+---
+
+<BaseLayout title="Busqueda Historica" currentPath="/busqueda-historica/">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-7">
+      <h2 class="text-xl font-bold tracking-tight text-white sm:text-2xl">Filtrado de Datos</h2>
+      <p class="mt-0.5 text-sm text-slate-500">Filtra indicadores financieros chilenos por tipo y año</p>
+    </div>
+
+    <CurrentValues client:load />
+
+    <HistoricalSearch client:load />
+  </div>
+</BaseLayout>

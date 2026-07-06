@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Card from '../components/ui/Card.astro';
+import AreaChart from '../components/charts/AreaChart.tsx';
+import StressSimulator from '../components/widgets/StressSimulator.tsx';
+import { API_BASE_URL } from '../constants/indicators';
+---
+
+<BaseLayout title="Pronóstico de Mercado" currentPath="/pronostico-mercado/">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-7">
+      <h2 class="text-xl font-bold tracking-tight text-white sm:text-2xl">Pronóstico de Mercado</h2>
+      <p class="mt-0.5 text-sm text-slate-500">Proyección de indicadores basada en datos históricos y análisis predictivo</p>
+    </div>
+
+    <!-- ─── barra de fuente de datos ─── -->
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-slate-800/60 bg-slate-900/40 px-4 py-3">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/8 px-2 py-0.5 text-[11px] font-medium text-emerald-400">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          Datos de mindicador.cl
+        </span>
+        <span class="text-[11px] text-slate-500">Fuente: mindicador.cl</span>
+      </div>
+      <a
+        href={`${API_BASE_URL}/uf`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-[11px] text-blue-400 hover:text-blue-300 transition-colors"
+      >
+        Verificar endpoint: {API_BASE_URL}/uf
+        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- ─── grafico de proyeccion uf ─── -->
+    <Card class="mb-7">
+      <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 class="text-sm font-semibold text-slate-200">Proyección UF — Próximos 3 meses</h3>
+          <p class="mt-0.5 text-xs text-slate-500">Datos históricos reales + proyección estimada mediante regresión lineal</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            Histórico (API)
+          </span>
+          <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <span class="h-2 w-2 rounded-full bg-amber-400"></span>
+            Proyectado (regresión lineal)
+          </span>
+        </div>
+      </div>
+      <AreaChart client:load />
+      <div class="mt-4 rounded-lg bg-amber-500/5 border border-amber-500/20 px-4 py-3">
+        <div class="flex items-start gap-2">
+          <svg class="h-4 w-4 mt-0.5 flex-shrink-0 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+          </svg>
+          <div>
+            <p class="text-xs font-medium text-amber-400">Nota Importante</p>
+            <p class="mt-0.5 text-xs text-slate-500 leading-relaxed">
+              Los puntos verdes son datos reales obtenidos de la API de mindicador.cl en tiempo real.
+              Los puntos ámbar son una proyección matemática usando regresión lineal simple sobre esos datos.
+              No constituye asesoría financiera ni información oficial.
+            </p>
+          </div>
+        </div>
+      </div>
+    </Card>
+
+    <!-- ─── simulador de escenarios de estres ─── -->
+    <div class="mb-6">
+      <div class="mb-6">
+        <h3 class="text-base font-semibold text-slate-200">Simulador de Escenarios de Estrés</h3>
+        <p class="mt-0.5 text-sm text-slate-500">Ingresa un monto y evalúa su comportamiento bajo diferentes condiciones de mercado a 12 meses.</p>
+      </div>
+
+      <StressSimulator client:load />
+    </div>
+  </div>
+</BaseLayout>

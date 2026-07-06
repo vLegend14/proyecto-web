@@ -1,0 +1,38 @@
+---
+export const prerender = false;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DashboardWidgets from '../components/widgets/DashboardWidgets';
+
+// ─── obtener saludo segun la hora del dia
+const currentHour = new Date().getHours();
+const greetingMessage = currentHour < 12 ? "Buenos dias" : currentHour < 18 ? "Buenas tardes" : "Buenas noches";
+
+// ─── formatear fecha actual en español
+const formattedDate = new Date().toLocaleDateString("es-CL", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+---
+
+<BaseLayout title="Dashboard" currentPath="/" userName="Cristopher Perez" userRole="Analista Financiero">
+  <div class="mx-auto max-w-6xl">
+
+    <div class="mb-7 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="flex items-center gap-2.5 text-xl font-bold tracking-tight text-white sm:text-2xl">
+          <svg class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+          </svg>
+          {greetingMessage}
+        </h2>
+        <p class="mt-0.5 text-sm text-slate-500">{capitalizedDate}</p>
+      </div>
+    </div>
+
+    <DashboardWidgets client:load />
+
+  </div>
+</BaseLayout>

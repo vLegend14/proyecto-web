@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #020617;
+  --color-surface-elevated: #0a1628;
+  --color-primary: #10b981;
+  --color-primary-dark: #059669;
+  --color-primary-light: #34d399;
+  --color-secondary: #3b82f6;
+  --color-secondary-dark: #2563eb;
+  --color-secondary-light: #60a5fa;
+  --color-accent: #f59e0b;
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-border: #1e293b;
+  --color-border-light: #334155;
+  --color-text-muted: #94a3b8;
+  --color-text-dim: #64748b;
+  --color-chart-1: #10b981;
+  --color-chart-2: #3b82f6;
+  --color-chart-3: #f59e0b;
+  --font-family-sans: "Inter", sans-serif;
+
+  --text-caption: 11px;
+  --text-caption--line-height: 1.25;
+  --text-small: 13px;
+  --text-small--line-height: 1.4;
+  --text-body: 14px;
+  --text-body--line-height: 1.5;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-family-sans);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.06), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(59, 130, 246, 0.04), transparent);
+    background-attachment: fixed;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(51 65 85);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(71 85 105);
+  }
+}
+
+@layer utilities {
+  .card-hover {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+    border-color: rgb(51 65 85);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 10px 40px -5px rgba(0, 0, 0, 0.4);
+  }
+
+  .skeleton-shimmer {
+    background-size: 200% 100%;
+    background-image: linear-gradient(
+      90deg,
+      rgb(30 41 59) 0%,
+      rgb(51 65 85) 40%,
+      rgb(30 41 59) 80%
+    );
+    animation: shimmer 2s infinite linear;
+  }
+
+  .nav-link {
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200;
+  }
+
+  .nav-link-active {
+    @apply bg-primary/10 text-primary;
+  }
+
+  .nav-link-inactive {
+    @apply text-slate-400 hover:bg-slate-800/40 hover:text-slate-200;
+  }
+
+  .glass-panel {
+    @apply border border-slate-800/60 bg-slate-900/40 backdrop-blur-xl;
+  }
+
+  .btn-icon {
+    @apply flex items-center justify-center rounded-lg transition-colors active:scale-95 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-white via-white to-slate-400 bg-clip-text text-transparent;
+  }
+
+  .heading-gradient {
+    @apply bg-gradient-to-r from-primary via-emerald-300 to-primary-light bg-clip-text text-transparent;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
